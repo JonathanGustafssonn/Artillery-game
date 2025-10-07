@@ -1,5 +1,7 @@
 # Artillery-game
 Artillery game
 
-Physics - Jimmy
-Graphics - Bullebra
+Jimmy - Physics
+Bullebra - Graphics
+Coalie - 
+Pricall - 
