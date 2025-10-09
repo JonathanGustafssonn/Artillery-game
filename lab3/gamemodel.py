@@ -17,7 +17,7 @@ class Game:
 
     """ The height/width of the cannon """
     def getCannonSize(self):
-        return 0 #TODO: this is just a dummy value
+        return 3 #TODO: this is just a dummy value
 
     """ The radius of cannon balls """
     def getBallSize(self):
