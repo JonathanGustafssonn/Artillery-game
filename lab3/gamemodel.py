@@ -9,6 +9,9 @@ class Game:
     def __init__(self, cannonSize, ballSize):
         self.players = [Player(self, False, -90, "blue"), Player(self, True, 90, "red")]
         self.current_player_index = 0
+        self.wind = (random.random()*20)-10
+        self.cannonSize = cannonSize
+        self.ballSize = ballSize
 
     """ A list containing both players """
     def getPlayers(self):
@@ -16,11 +19,11 @@ class Game:
 
     """ The height/width of the cannon """
     def getCannonSize(self):
-        return 0 #TODO: this is just a dummy value
+        return self.cannonSize
 
     """ The radius of cannon balls """
     def getBallSize(self):
-        return 0 #TODO: this is just a dummy value
+        return self.ballSize
 
     """ The current player, i.e. the player whose turn it is """
     def getCurrentPlayer(self):
@@ -40,17 +43,14 @@ class Game:
 
     """ Set the current wind speed, only used for testing """
     def setCurrentWind(self, wind):
-        pass
+        self.wind=wind
     
     def getCurrentWind(self):
-        return 0 #TODO: this is just a dummy value
+        return self.wind
 
     """ Start a new round with a random wind value (-10 to +10) """
     def newRound(self):
-        #HINT: random.random() gives a random value between 0 and 1
-        # multiplying this by 20 gives a random value between 0 and 20
-        # how do you shift a value between 0 and 20 to one between -10 and +10?
-        pass #TODO: this should do something instead of nothing
+        self.wind = (random.random()*20)-10
 
 """ Models a player """
 class Player:
@@ -66,7 +66,11 @@ class Player:
         # The projectile should start in the middle of the cannon of the firing player
         # HINT: Your job here is to call the constructor of Projectile with all the right values
         # Some are hard-coded, like the boundaries for x-position, others can be found in Game or Player
-        projectile = Projectile(self.position, self.isReversed)
+        self.angle = angle
+        self.velocity = velocity
+        self.xPos = Projectile.getX(self)
+        self.yPos = Projectile.getY(self)
+        projectile = Projectile(self.angle, self.velocity, self.isReversed, self.xPos, self.yPos)
         return projectile
 
     """ Gives the x-distance from this players cannon to a projectile. If the cannon and the projectile touch (assuming the projectile is on the ground and factoring in both cannon and projectile size) this method should return 0"""
