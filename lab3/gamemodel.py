@@ -7,13 +7,12 @@ import random
 class Game:
     """ Create a game with a given size of cannon (length of sides) and projectiles (radius) """
     def __init__(self, cannonSize, ballSize):
-        # TODO: "pass" means the constructor does nothing. Clearly it should be doing something.
-        # HINT: This constructor needs to create two players according to the rules specified in the assignment text
-        pass 
+        self.players = [Player(self, False, -90, "blue"), Player(self, True, 90, "red")]
+        self.current_player_index = 0
 
     """ A list containing both players """
     def getPlayers(self):
-        return [] #TODO: this is just a dummy value
+        return self.players
 
     """ The height/width of the cannon """
     def getCannonSize(self):
@@ -25,24 +24,23 @@ class Game:
 
     """ The current player, i.e. the player whose turn it is """
     def getCurrentPlayer(self):
-        return None #TODO: this is just a dummy value
+        return self.players[self.current_player_index]
 
     """ The opponent of the current player """
     def getOtherPlayer(self):
-        return None #TODO: this is just a dummy value
+        return self.players[1 - self.current_player_index]
     
     """ The number (0 or 1) of the current player. This should be the position of the current player in getPlayers(). """
     def getCurrentPlayerNumber(self):
-        return 0 #TODO: this is just a dummy value
+        return self.current_player_index
     
     """ Switch active player """
     def nextPlayer(self):
-        pass #TODO: this should do something instead of nothing
+        self.current_player_index = 1 - self.current_player_index # gets 0 if the current player is 1 (1-1), and 1 if current player is 0 (1-0) 
 
     """ Set the current wind speed, only used for testing """
     def setCurrentWind(self, wind):
-        pass #TODO: this should do something instead of nothing
-
+        pass
     
     def getCurrentWind(self):
         return 0 #TODO: this is just a dummy value
@@ -56,15 +54,20 @@ class Game:
 
 """ Models a player """
 class Player:
-   #TODO: You need to create a constructor here. 
-   #HINT: It should probably take the Game that creates it as parameter and some additional properties that differ between players (like firing-direction, position and color)
+    #HINT: It should probably take the Game that creates it as parameter and some additional properties that differ between players (like firing-direction, position and color)
+    def __init__(self, game, isReversed, position, color):
+        self.game = game
+        self.isReversed = isReversed
+        self.position = position
+        self.color = color
     
     """ Create and return a projectile starting at the centre of this players cannon. Replaces any previous projectile for this player. """
     def fire(self, angle, velocity):
         # The projectile should start in the middle of the cannon of the firing player
         # HINT: Your job here is to call the constructor of Projectile with all the right values
         # Some are hard-coded, like the boundaries for x-position, others can be found in Game or Player
-        return None #TODO: this is just a dummy value
+        projectile = Projectile(self.position, self.isReversed)
+        return projectile
 
     """ Gives the x-distance from this players cannon to a projectile. If the cannon and the projectile touch (assuming the projectile is on the ground and factoring in both cannon and projectile size) this method should return 0"""
     def projectileDistance(self, proj):
@@ -85,11 +88,11 @@ class Player:
 
     """ Returns the color of this player (a string)"""
     def getColor(self):
-        return "DUMMY COLOR" #TODO: this is just a dummy value
+        return self.color
 
     """ The x-position of the centre of this players cannon """
     def getX(self):
-        return 0 #TODO: this is just a dummy value
+        return self.position
 
     """ The angle and velocity of the last projectile this player fired, initially (45, 40) """
     def getAim(self):
@@ -153,3 +156,4 @@ class Projectile:
     """ The current y-position (height) of the projectile". Should never be below 0. """
     def getY(self):
         return self.yPos
+
