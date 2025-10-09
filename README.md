@@ -3,5 +3,5 @@ Artillery game
 
 Jimmy - Physics
 Bullebra - Graphics
-Coalie - 
+Coalie - uhhhh
 Pricall - 
