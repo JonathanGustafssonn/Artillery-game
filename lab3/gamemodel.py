@@ -7,7 +7,7 @@ import random
 class Game:
     """ Create a game with a given size of cannon (length of sides) and projectiles (radius) """
     def __init__(self, cannonSize, ballSize):
-        self.players = [Player(self, False, -90, "blue", 0), Player(self, True, 90, "red", 0)]
+        self.players = [Player(self, False, -90, "blue"), Player(self, True, 90, "red")]
         self.current_player_index = 0
         self.wind = (random.random()*20)-10
         self.cannonSize = cannonSize
@@ -55,12 +55,14 @@ class Game:
 """ Models a player """
 class Player:
     #HINT: It should probably take the Game that creates it as parameter and some additional properties that differ between players (like firing-direction, position and color)
-    def __init__(self, game, isReversed, position, color, score):
+    def __init__(self, game, isReversed, position, color):
         self.game = game
         self.isReversed = isReversed
         self.position = position
         self.color = color
-        self.score = score
+        self.score = 0
+        self.angle = 0
+        self.velocity = 0
         
     
     """ Create and return a projectile starting at the centre of this players cannon. Replaces any previous projectile for this player. """
@@ -68,11 +70,17 @@ class Player:
         # The projectile should start in the middle of the cannon of the firing player
         # HINT: Your job here is to call the constructor of Projectile with all the right values
         # Some are hard-coded, like the boundaries for x-position, others can be found in Game or Player
+        '''
         self.angle = angle
         self.velocity = velocity
-
+        self.xPos = Projectile.getX(self)
+        self.yPos = Projectile.getY(self)
+        projectile = Projectile(self.angle, self.velocity, self.isReversed, self.xPos, self.yPos)
+        '''
+        self.angle = angle
+        self.velocity = velocity
         if(self.isReversed):
-            projectile = Projectile(180- angle, velocity, self.game.getCurrentWind(),self.position,self.game.getCannonSize()/2,-110, 110)
+            projectile = Projectile(180- angle, self.velocity, self.game.getCurrentWind(),self.position,self.game.getCannonSize()/2,-110, 110)
         else:
             projectile = Projectile(angle, velocity, self.game.getCurrentWind(),self.position,self.game.getCannonSize()/2,-110, 110)
         return projectile
