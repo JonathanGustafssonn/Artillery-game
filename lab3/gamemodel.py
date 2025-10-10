@@ -7,7 +7,7 @@ import random
 class Game:
     """ Create a game with a given size of cannon (length of sides) and projectiles (radius) """
     def __init__(self, cannonSize, ballSize):
-        self.players = [Player(self, False, -90, "blue"), Player(self, True, 90, "red")]
+        self.players = [Player(self, False, -90, "blue", 0), Player(self, True, 90, "red", 0)]
         self.current_player_index = 0
         self.wind = (random.random()*20)-10
         self.cannonSize = cannonSize
@@ -55,11 +55,13 @@ class Game:
 """ Models a player """
 class Player:
     #HINT: It should probably take the Game that creates it as parameter and some additional properties that differ between players (like firing-direction, position and color)
-    def __init__(self, game, isReversed, position, color):
+    def __init__(self, game, isReversed, position, color, score):
         self.game = game
         self.isReversed = isReversed
         self.position = position
         self.color = color
+        self.score = score
+        
     
     """ Create and return a projectile starting at the centre of this players cannon. Replaces any previous projectile for this player. """
     def fire(self, angle, velocity):
@@ -68,9 +70,11 @@ class Player:
         # Some are hard-coded, like the boundaries for x-position, others can be found in Game or Player
         self.angle = angle
         self.velocity = velocity
-        self.xPos = Projectile.getX(self)
-        self.yPos = Projectile.getY(self)
-        projectile = Projectile(self.angle, self.velocity, self.isReversed, self.xPos, self.yPos)
+
+        if(self.isReversed):
+            projectile = Projectile(180- angle, velocity, self.game.getCurrentWind(),self.position,self.game.getCannonSize()/2,-110, 110)
+        else:
+            projectile = Projectile(angle, velocity, self.game.getCurrentWind(),self.position,self.game.getCannonSize()/2,-110, 110)
         return projectile
 
     """ Gives the x-distance from this players cannon to a projectile. If the cannon and the projectile touch (assuming the projectile is on the ground and factoring in both cannon and projectile size) this method should return 0"""
@@ -79,16 +83,32 @@ class Player:
         # HINT: This method should give a negative value if the projectile missed to the left and positive if it missed to the right.
         # The distance should be how far the projectile and cannon are from touching, not the distance between their centers.
         # You probably need to use getCannonSize and getBallSize from Game to compensate for the size of cannons/cannonballs
- 
-        return 0 #TODO: this is a dummy value.
+        playerX = self.getX()
+        projX = proj.getX()
+        playerSize = self.game.getCannonSize()
+        projSize = self.game.getBallSize()
+        distance = projX - playerX
+        edges = playerSize / 2 + projSize
+
+        if(abs(distance) < edges):
+            return 0 #A hit
+        else:
+            if(distance > 0):
+                return distance - edges
+            else:
+                return distance + edges
+        pass
+        #return 0 #TODO: this is a dummy value.
 
     """ The current score of this player """
     def getScore(self):
-        return 0 #TODO: this is just a dummy value
+        return self.score #TODO: this is just a dummy value
 
     """ Increase the score of this player by 1."""
     def increaseScore(self):
-        pass #TODO: this should do something instead of nothing
+        self.score += 1
+        return self.score
+        #pass #TODO: this should do something instead of nothing
 
     """ Returns the color of this player (a string)"""
     def getColor(self):
@@ -100,7 +120,7 @@ class Player:
 
     """ The angle and velocity of the last projectile this player fired, initially (45, 40) """
     def getAim(self):
-        return 0, 0 #TODO: this is just a dummy value 
+        return self.angle, self.velocity #TODO: this is just a dummy value 
 
 
 
@@ -123,8 +143,6 @@ class Projectile:
         self.xvel = velocity*cos(theta)
         self.yvel = velocity*sin(theta)
         self.wind = wind
-
-
     """ 
         Advance time by a given number of seconds
         (typically, time is less than a second, 
