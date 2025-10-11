@@ -73,12 +73,19 @@ class GameGraphics:
         circle_X = proj.getX()
         circle_Y = proj.getY()
 
-        # TODO: If the circle for the projectile for the current player
-        # is not None, undraw it!
+        # Removes the previous projectile if it existed
+        # Each player can only have at most one projectile drawn at a time
+        # Before drawing a new one, undraws the old one
+        currentPlayerNr = self.game.getCurrentPlayerNumber()
+        if self.draw_projs[currentPlayerNr] is not None:
+            self.draw_projs[currentPlayerNr].undraw()
 
-        # draw the projectile (ball/circle)
-        # TODO: Create and draw a new circle with the coordinates of
-        # the projectile.
+        # Draws the projectile. The projectile's current position is the center of the circle. The radius comes from ball size and color is determined by the player color
+        radius = self.game.getBallSize()
+        circle = Circle(Point(circle_X, circle_Y), radius)
+        circle.setFill(player.getColor())
+        circle.draw(self.win)
+        self.draw_projs[currentPlayerNr] = circle
 
         while proj.isMoving():
             proj.update(1/50)
@@ -94,9 +101,19 @@ class GameGraphics:
         return proj
 
     def updateScore(self,playerNr):
-        # update the score on the screen
-        # TODO: undraw the old text, create and draw a new text
-        pass
+        # Removes the old score text
+        self.draw_scores[playerNr].undraw()
+
+        # The x position of the score matches the player's cannon x position, while the y position is set just below the cannon at half the cannon size
+        player = self.game.getPlayers()[playerNr]
+        x = player.getX()
+        y = -self.game.getCannonSize() / 2
+        # Creates a new Text object with the player's updated score and draws it on screen
+        new_text = Text(Point(x, y), f"Score {player.getScore()}")
+        new_text.draw(self.win)
+
+        # Saves the text object so it can be updated next time
+        self.draw_scores[playerNr] = new_text
 
     def play(self):
         while True:
