@@ -24,7 +24,7 @@ class GameGraphics:
         player = self.game.getPlayers()[playerNr]
 
         #Creates both cubes, gives them a position, gives them a color.
-        cannon = Rectangle(Point(player.position,0),Point(player.position+self.game.cannonSize,self.game.cannonSize))
+        cannon = Rectangle(Point(player.position-self.game.cannonSize/2,0),Point(player.position+self.game.cannonSize/2,self.game.cannonSize))
         cannon.setFill(player.color)
         cannon.draw(self.win)
         return cannon
@@ -37,7 +37,7 @@ class GameGraphics:
 
         #Draws two separate texts under each player.
         #The "-playerXpos/2" part means that i position the text below the cannon, and the distance down is half the size of the cannon.
-        text = Text(Point(player.position,player.position/-2),"Score 0") 
+        text = Text(Point(player.position,-self.game.cannonSize/2),"Score 0") 
         text.draw(self.win)
         return text
 
