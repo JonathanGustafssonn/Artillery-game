@@ -41,6 +41,23 @@ class GameGraphics:
         text.draw(self.win)
         return text
 
+    def explode(self,playerNr):
+        players = self.game.getPlayers()
+        otherPlayer = players[1 - playerNr]
+        color = self.game.getPlayers()[playerNr].color
+        explosionSize = self.game.cannonSize
+        explosion = None
+        while explosionSize < self.game.cannonSize*2:
+            if explosion:
+                explosion.undraw()
+            explosion = Circle(Point(otherPlayer.position, self.game.cannonSize/2),explosionSize)
+            explosion.setFill(color)
+            explosion.draw(self.win)
+            explosionSize += self.game.cannonSize / (1/2) * (1/50)
+            update(50)
+        explosion.undraw()
+
+
     def fire(self, angle, vel):
         player = self.game.getCurrentPlayer()
         proj = player.fire(angle, vel)
@@ -52,7 +69,7 @@ class GameGraphics:
         # Each player can only have at most one projectile drawn at a time
         # Before drawing a new one, undraws the old one
         currentPlayerNr = self.game.getCurrentPlayerNumber()
-        if self.draw_projs[currentPlayerNr] is not None:
+        if self.draw_projs[currentPlayerNr]:
             self.draw_projs[currentPlayerNr].undraw()
 
         # Draws the projectile. The projectile's current position is the center of the circle. The radius comes from ball size and color is determined by the player color
@@ -112,7 +129,9 @@ class GameGraphics:
 
             if distance == 0.0:
                 player.increaseScore()
-                self.updateScore(self.game.getCurrentPlayerNumber())
+                playerNr = self.game.getCurrentPlayerNumber()
+                self.explode(playerNr)
+                self.updateScore(playerNr)
                 self.game.newRound()
 
             self.game.nextPlayer()

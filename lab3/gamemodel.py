@@ -58,8 +58,8 @@ class Player:
         self.position = position
         self.color = color
         self.score = 0
-        self.angle = 0
-        self.velocity = 0
+        self.angle = 45
+        self.velocity = 40
         
     
     """ Create and return a projectile starting at the centre of this players cannon. Replaces any previous projectile for this player. """
