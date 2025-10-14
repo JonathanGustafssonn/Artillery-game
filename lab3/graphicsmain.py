@@ -38,6 +38,8 @@ class GameGraphics:
         #Draws two separate texts under each player.
         #The "-playerXpos/2" part means that i position the text below the cannon, and the distance down is half the size of the cannon.
         text = Text(Point(player.position,player.position/-2),"Score 0") 
+        text.draw(self.win)
+        return text
 
     def fire(self, angle, vel):
         player = self.game.getCurrentPlayer()
