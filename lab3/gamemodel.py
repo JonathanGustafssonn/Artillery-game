@@ -1,15 +1,13 @@
 from math import sin,cos,radians
 import random
 
-#TODO: Deal with all TODOs in this file and also remove the TODO and HINT comments.
-
 """ This is the model of the game"""
 class Game:
     """ Create a game with a given size of cannon (length of sides) and projectiles (radius) """
     def __init__(self, cannonSize, ballSize):
-        self.players = [Player(self, False, -90, "blue"), Player(self, True, 90, "red")]
+        self.players = [Player(self, False, -90, "blue"), Player(self, True, 90, "red")] # create players with different arguments
         self.current_player_index = 0
-        self.wind = (random.random()*20)-10
+        self.wind = (random.random()*20)-10 # randomize between -10 and 10
         self.cannonSize = cannonSize
         self.ballSize = ballSize
 
@@ -31,7 +29,7 @@ class Game:
 
     """ The opponent of the current player """
     def getOtherPlayer(self):
-        return self.players[1 - self.current_player_index]
+        return self.players[1 - self.current_player_index] # 1-1 gets 0, 1-0 gets 1, therefore the opponent
     
     """ The number (0 or 1) of the current player. This should be the position of the current player in getPlayers(). """
     def getCurrentPlayerNumber(self):
@@ -54,7 +52,6 @@ class Game:
 
 """ Models a player """
 class Player:
-    #HINT: It should probably take the Game that creates it as parameter and some additional properties that differ between players (like firing-direction, position and color)
     def __init__(self, game, isReversed, position, color):
         self.game = game
         self.isReversed = isReversed
@@ -67,16 +64,6 @@ class Player:
     
     """ Create and return a projectile starting at the centre of this players cannon. Replaces any previous projectile for this player. """
     def fire(self, angle, velocity):
-        # The projectile should start in the middle of the cannon of the firing player
-        # HINT: Your job here is to call the constructor of Projectile with all the right values
-        # Some are hard-coded, like the boundaries for x-position, others can be found in Game or Player
-        '''
-        self.angle = angle
-        self.velocity = velocity
-        self.xPos = Projectile.getX(self)
-        self.yPos = Projectile.getY(self)
-        projectile = Projectile(self.angle, self.velocity, self.isReversed, self.xPos, self.yPos)
-        '''
         self.angle = angle
         self.velocity = velocity
         if(self.isReversed):
@@ -87,10 +74,6 @@ class Player:
 
     """ Gives the x-distance from this players cannon to a projectile. If the cannon and the projectile touch (assuming the projectile is on the ground and factoring in both cannon and projectile size) this method should return 0"""
     def projectileDistance(self, proj):
-        # HINT: both self (a Player) and proj (a Projectile) have getX()-methods.
-        # HINT: This method should give a negative value if the projectile missed to the left and positive if it missed to the right.
-        # The distance should be how far the projectile and cannon are from touching, not the distance between their centers.
-        # You probably need to use getCannonSize and getBallSize from Game to compensate for the size of cannons/cannonballs
         playerX = self.getX()
         projX = proj.getX()
         playerSize = self.game.getCannonSize()
@@ -106,17 +89,15 @@ class Player:
             else:
                 return distance + edges
         pass
-        #return 0 #TODO: this is a dummy value.
 
     """ The current score of this player """
     def getScore(self):
-        return self.score #TODO: this is just a dummy value
+        return self.score
 
     """ Increase the score of this player by 1."""
     def increaseScore(self):
         self.score += 1
         return self.score
-        #pass #TODO: this should do something instead of nothing
 
     """ Returns the color of this player (a string)"""
     def getColor(self):
@@ -128,7 +109,7 @@ class Player:
 
     """ The angle and velocity of the last projectile this player fired, initially (45, 40) """
     def getAim(self):
-        return self.angle, self.velocity #TODO: this is just a dummy value 
+        return self.angle, self.velocity
 
 
 
