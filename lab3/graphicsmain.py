@@ -1,6 +1,9 @@
 from gamemodel import *
 from graphics import *
 
+EXPLOSION_TIME = 1/2
+FRAME_RATE = 50
+
 class GameGraphics:
     def __init__(self, game):
         self.game = game
@@ -18,7 +21,6 @@ class GameGraphics:
         self.draw_projs   = [None, None]
 
     def drawCanon(self,playerNr):
-        # draw the cannon
 
         #Calls player number.
         player = self.game.getPlayers()[playerNr]
@@ -30,7 +32,6 @@ class GameGraphics:
         return cannon
 
     def drawScore(self,playerNr):
-        # draw the score
 
         #Calls player number.
         player = self.game.getPlayers()[playerNr]
@@ -47,13 +48,14 @@ class GameGraphics:
         color = self.game.getPlayers()[playerNr].color
         explosionSize = self.game.cannonSize
         explosion = None
+        #Explosion animation
         while explosionSize < self.game.cannonSize*2:
             if explosion:
                 explosion.undraw()
             explosion = Circle(Point(otherPlayer.position, self.game.cannonSize/2),explosionSize)
             explosion.setFill(color)
             explosion.draw(self.win)
-            explosionSize += self.game.cannonSize / (1/2) * (1/50)
+            explosionSize += self.game.cannonSize / EXPLOSION_TIME / FRAME_RATE
             update(50)
         explosion.undraw()
 
